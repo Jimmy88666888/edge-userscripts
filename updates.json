@@ -3,7 +3,7 @@
     "file": "mobile/ac-baidu-search.user.js",
     "platform": "mobile",
     "name": "AC-baidu-重定向优化百度搜狗谷歌必应搜索_favicon_双列",
-    "version": "27.20",
+    "version": "27.27",
     "author": "AC",
     "license": "GPL-3.0-only",
     "namespace": "1353464539@qq.com",
@@ -14,7 +14,8 @@
     "update_channel": "repo-raw",
     "mirror": "raw",
     "update_url": "https://raw.githubusercontent.com/Jimmy88666888/edge-userscripts/main/mobile/ac-baidu-search.user.js",
-    "raw": "https://raw.githubusercontent.com/Jimmy88666888/edge-userscripts/main/mobile/ac-baidu-search.user.js"
+    "raw": "https://raw.githubusercontent.com/Jimmy88666888/edge-userscripts/main/mobile/ac-baidu-search.user.js",
+    "synced_at": "2026-11-27"
   },
   {
     "file": "mobile/adguard-extra.user.js",
@@ -672,7 +673,7 @@
     "file": "pc/ac-baidu-search.user.js",
     "platform": "pc",
     "name": "AC-baidu-重定向优化百度搜狗谷歌必应搜索_favicon_双列",
-    "version": "27.20",
+    "version": "27.27",
     "author": "AC",
     "license": "GPL-3.0-only",
     "namespace": "1353464539@qq.com",
@@ -683,7 +684,8 @@
     "update_channel": "repo-mirror",
     "mirror": "jsdelivr",
     "update_url": "https://cdn.jsdelivr.net/gh/Jimmy88666888/edge-userscripts@main/pc/ac-baidu-search.user.js",
-    "raw": "https://raw.githubusercontent.com/Jimmy88666888/edge-userscripts/main/pc/ac-baidu-search.user.js"
+    "raw": "https://raw.githubusercontent.com/Jimmy88666888/edge-userscripts/main/pc/ac-baidu-search.user.js",
+    "synced_at": "2026-11-27"
   },
   {
     "file": "pc/adguard-extra.user.js",

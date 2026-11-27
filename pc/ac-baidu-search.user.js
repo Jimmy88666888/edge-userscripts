@@ -11,7 +11,7 @@
 // @license    GPL-3.0-only
 // @create     2015-11-25
 // @run-at     document-start
-// @version    27.20
+// @version 27.27
 // @connect    baidu.com
 // @connect    google.com
 // @connect    google.com.hk
@@ -49,8 +49,15 @@
 // @home-url2  https://github.com/langren1353/GM_script
 // @homepageURL  https://greasyfork.org/zh-TW/scripts/14178
 // @copyright  2015-2026, AC
-// @lastmodified  2026-06-18
+// @lastmodified  2026-11-26
 // @feedback-url  https://github.com/langren1353/GM_script
+// @note    2026.11-26-V27.27 修复百度、谷歌、bing的双列展示问题
+// @note    2026.10-26-V27.26 增强 AI 概览动态插入/类名变化后的隐藏；
+// @note    2026.10-26-V27.25 参考百度宽度并兼容 Google 三列/四列；
+// @note    2026.10-26-V27.24 隐藏 Google AI 概览并扩展双列搜索结果宽度；
+// @note    2026.10-26-V27.23 修复 AI 概览挤压双列：兼容 CSS 多栏与 Grid；
+// @note    2026.10-26-V27.22 初步处理谷歌 AI 概览与双列布局冲突；
+// @note    2026.07-18-V27.21 修复谷歌的双列问题；
 // @note    2026.06-18-V27.20 修复百度错位的问题
 // @note    2026.01-06-V27.19 修复百度、谷歌、必应的一些bug，增加页面加载动画，优化页面资源占用，避免大量的资源占用
 // @note    2025.10-22-V27.18 修复谷歌、百度在不同缩放屏幕下导致的错位问题
@@ -105,28 +112,33 @@
 // @note    2015.12.01-V5.0 加入搜狗的支持，但是支持不是很好
 // @note    2015.11.25-V2.0 优化，已经是真实地址的不再尝试获取
 // @note    2015.11.25-V1.0 完成去掉百度重定向的功能
-// @resource  baiduCommonStyle   https://ibaidu.tujidu.com/newcss/baiduCommonStyle.less?t=27.20
-// @resource  baiduOnePageStyle  https://ibaidu.tujidu.com/newcss/baiduOnePageStyle.less?t=27.20
-// @resource  baiduTwoPageStyle  https://ibaidu.tujidu.com/newcss/baiduTwoPageStyle.less?t=27.20
-// @resource  googleCommonStyle  https://ibaidu.tujidu.com/newcss/googleCommonStyle.less?t=27.20
-// @resource  googleOnePageStyle https://ibaidu.tujidu.com/newcss/googleOnePageStyle.less?t=27.20
-// @resource  googleTwoPageStyle https://ibaidu.tujidu.com/newcss/googleTwoPageStyle.less?t=27.20
-// @resource  bingCommonStyle    https://ibaidu.tujidu.com/newcss/bingCommonStyle.less?t=27.20
-// @resource  bingOnePageStyle   https://ibaidu.tujidu.com/newcss/bingOnePageStyle.less?t=27.20
-// @resource  bingTwoPageStyle   https://ibaidu.tujidu.com/newcss/bingTwoPageStyle.less?t=27.20
-// @resource  duckCommonStyle    https://ibaidu.tujidu.com/newcss/duckCommonStyle.less?t=27.20
-// @resource  duckOnePageStyle   https://ibaidu.tujidu.com/newcss/duckOnePageStyle.less?t=27.20
-// @resource  duckTwoPageStyle   https://ibaidu.tujidu.com/newcss/duckTwoPageStyle.less?t=27.20
-// @resource  dogeCommonStyle    https://ibaidu.tujidu.com/newcss/dogeCommonStyle.less?t=27.20
-// @resource  dogeOnePageStyle   https://ibaidu.tujidu.com/newcss/dogeOnePageStyle.less?t=27.20
-// @resource  dogeTwoPageStyle   https://ibaidu.tujidu.com/newcss/dogeTwoPageStyle.less?t=27.20
-// @resource  haosouCommonStyle    https://ibaidu.tujidu.com/newcss/haosouCommonStyle.less?t=27.20
-// @resource  haosouOnePageStyle   https://ibaidu.tujidu.com/newcss/haosouOnePageStyle.less?t=27.20
-// @resource  haosouTwoPageStyle   https://ibaidu.tujidu.com/newcss/haosouTwoPageStyle.less?t=27.20
-// @resource  HuYanStyle         https://ibaidu.tujidu.com/newcss/HuYanStyle.less?t=27.20
-// @resource  BgAutoFit          https://ibaidu.tujidu.com/newcss/BgAutoFit.less?t=27.20
-// @resource  HuaHua-ACDrakMode  https://ibaidu.tujidu.com/newcss/HuaHua-ACDrakMode.less?t=27.20
-// @resource  baiduLiteStyle     https://gitcode.net/-/snippets/1906/raw/master/LiteStyle.css?inline=false
+// @resource  baiduCommonStyle   https://ibaidu.tujidu.com/newcss/baiduCommonStyle.less?t=27.27
+// @resource  baiduOnePageStyle  https://ibaidu.tujidu.com/newcss/baiduOnePageStyle.less?t=27.27
+// @resource  baiduOneCenterStyle https://ibaidu.tujidu.com/newcss/baiduOneCenterStyle.less?t=27.27
+// @resource  baiduTwoPageStyle  https://ibaidu.tujidu.com/newcss/baiduTwoPageStyle.less?t=27.27
+// @resource  googleCommonStyle  https://ibaidu.tujidu.com/newcss/googleCommonStyle.less?t=27.27
+// @resource  googleOnePageStyle https://ibaidu.tujidu.com/newcss/googleOnePageStyle.less?t=27.27
+// @resource  googleOneCenterStyle https://ibaidu.tujidu.com/newcss/googleOneCenterStyle.less?t=27.27
+// @resource  googleTwoPageStyle https://ibaidu.tujidu.com/newcss/googleTwoPageStyle.less?t=27.27
+// @resource  bingCommonStyle    https://ibaidu.tujidu.com/newcss/bingCommonStyle.less?t=27.27
+// @resource  bingOnePageStyle   https://ibaidu.tujidu.com/newcss/bingOnePageStyle.less?t=27.27
+// @resource  bingOneCenterStyle https://ibaidu.tujidu.com/newcss/bingOneCenterStyle.less?t=27.27
+// @resource  bingTwoPageStyle   https://ibaidu.tujidu.com/newcss/bingTwoPageStyle.less?t=27.27
+// @resource  duckCommonStyle    https://ibaidu.tujidu.com/newcss/duckCommonStyle.less?t=27.27
+// @resource  duckOnePageStyle   https://ibaidu.tujidu.com/newcss/duckOnePageStyle.less?t=27.27
+// @resource  duckOneCenterStyle https://ibaidu.tujidu.com/newcss/duckOneCenterStyle.less?t=27.27
+// @resource  duckTwoPageStyle   https://ibaidu.tujidu.com/newcss/duckTwoPageStyle.less?t=27.27
+// @resource  dogeCommonStyle    https://ibaidu.tujidu.com/newcss/dogeCommonStyle.less?t=27.27
+// @resource  dogeOnePageStyle   https://ibaidu.tujidu.com/newcss/dogeOnePageStyle.less?t=27.27
+// @resource  dogeTwoPageStyle   https://ibaidu.tujidu.com/newcss/dogeTwoPageStyle.less?t=27.27
+// @resource  haosouCommonStyle    https://ibaidu.tujidu.com/newcss/haosouCommonStyle.less?t=27.27
+// @resource  haosouOnePageStyle   https://ibaidu.tujidu.com/newcss/haosouOnePageStyle.less?t=27.27
+// @resource  haosouOneCenterStyle https://ibaidu.tujidu.com/newcss/haosouOneCenterStyle.less?t=27.27
+// @resource  haosouTwoPageStyle   https://ibaidu.tujidu.com/newcss/haosouTwoPageStyle.less?t=27.27
+// @resource  HuYanStyle         https://ibaidu.tujidu.com/newcss/HuYanStyle.less?t=27.27
+// @resource  BgAutoFit          https://ibaidu.tujidu.com/newcss/BgAutoFit.less?t=27.27
+// @resource  HuaHua-ACDrakMode  https://ibaidu.tujidu.com/newcss/HuaHua-ACDrakMode.less?t=27.27
+// @resource  baiduLiteStyle     https://ibaidu.tujidu.com/newcss/baiduLiteStyle.less?t=27.27
 // @require   https://registry.npmmirror.com/less_browser_fix/4.2.2/files/dist/less.min.js
 // @require   https://registry.npmmirror.com/vue/3.5.26/files/dist/vue.runtime.global.prod.js
 // @noframes
@@ -1016,6 +1028,7 @@
 
         leftCommonStyle: '',
         onePageStyle: '',
+        oneCenterStyle: '',
         twoPageStyle: '',
         multiPageStyle: '',
         expandPageStyle: '',
@@ -1034,6 +1047,7 @@
         bodyLocked: true,
         headLocked: true,
         pageLoadingLocked: false,
+        hasStartedLoadMore: false, // 首次翻页后锁定当前多列计算结果
         isBlockChecking: false,
         isFaviconChecking: false,
         isCounterChecking: false,
@@ -1159,7 +1173,13 @@
       }
 
       async function setLocalLessData(renderCSSKeyName, getLessDataFunc) {
-        const { css = '' } = await less.render(await getLessDataFunc());
+        const lessText = await getLessDataFunc()
+        // 空内容（远端 newcss 还没上传这个新文件）不写缓存，否则补传之后仍会一直读到空缓存
+        if (!lessText) {
+          console.mylog('样式内容为空，跳过缓存：' + renderCSSKeyName)
+          return ''
+        }
+        const { css = '' } = await less.render(lessText);
         localStorage.setItem(renderCSSKeyName, css)
         return css
       }
@@ -1176,19 +1196,62 @@
       }
 
       async function getRenderStyle() {
-        return GM_getResourceText(styleName)
+        // 新拆出来的 less（如 <engine>OneCenterStyle）在远端 newcss 里可能还没上传，
+        // GM_getResourceText 遇到未声明的资源名会直接抛错，一抛整条 CSS 加载链就断了，这里按空样式处理
+        try {
+          return GM_getResourceText(styleName) || ''
+        } catch (e) {
+          console.mylog('资源不存在，按空样式处理：' + styleName)
+          return ''
+        }
       }
+    }
+
+    /* 单列样式拆分进度（一张表管所有引擎，改拆分只动这张表）：
+         oneCenter = 有 <engine>OneCenterStyle.less，模式 2（单列居中）用它
+         onePage   = <engine>OnePageStyle.less 已经改成「单列靠左」规则，模式 1 才加载它
+       百度两侧都拆完了；其它引擎的 OnePage 里目前仍是「居中」规则（justify-content:center、
+       margin:0 auto 之类），所以先只开 OneCenter（内容是该引擎原 OnePage 的逐字副本，
+       模式 2 渲染零变化），onePage 留 false —— 模式 1 依旧只有 CommonStyle，
+       不会把居中的规则套到靠左模式上。
+       要把某个引擎的靠左模式也接进来：把 <engine>OnePageStyle.less 改成靠左规则，再把对应 onePage 置 true */
+    splitStyleSupport() {
+      const table = {
+        baidu: { onePage: true, oneCenter: true },
+        google: { onePage: false, oneCenter: true },
+        bing: { onePage: false, oneCenter: true },
+        duck: { onePage: false, oneCenter: true },
+        haosou: { onePage: false, oneCenter: true },
+      }
+      return table[this.options.siteName] || { onePage: false, oneCenter: false }
     }
 
     async loadSiteCSS() {
       console.mylog('CSS加载开始' + +this.curConfig.adsStyleMode)
+      const split = this.splitStyleSupport()
       // 加载多列
       if (this.curConfig.adsStyleEnable) {
         if (+this.curConfig.adsStyleMode >= 1) {
           this.adsCSSList.leftCommonStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'CommonStyle') // 单列效果
         }
-        if (+this.curConfig.adsStyleMode >= 2) {
-          this.adsCSSList.onePageStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'OnePageStyle') // 单列居中
+        // 单列靠左（模式 1）：只有 onePage 已改造成靠左规则的引擎才加载；其余维持只有 CommonStyle
+        if (+this.curConfig.adsStyleMode === 1 && split.onePage) {
+          this.adsCSSList.onePageStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'OnePageStyle') // 单列（靠左）
+        }
+        // 单列居中（模式 2）：读拆出来的 OneCenterStyle；没有拆分的引擎仍用 OnePageStyle
+        if (+this.curConfig.adsStyleMode === 2) {
+          if (split.oneCenter) {
+            const centerCSS = await this.loadStyleByName_WithLessCache(this.options.siteName + 'OneCenterStyle')
+            if (centerCSS) {
+              this.adsCSSList.oneCenterStyle = centerCSS // 单列居中
+            } else {
+              // 远端 newcss 里还没上传新文件时不能让模式 2 变空白，回退旧的 OnePageStyle
+              console.mylog('OneCenterStyle 为空，回退 OnePageStyle：' + this.options.siteName)
+              this.adsCSSList.onePageStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'OnePageStyle')
+            }
+          } else {
+            this.adsCSSList.onePageStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'OnePageStyle') // 未拆分引擎沿用
+          }
         }
         if (+this.curConfig.adsStyleMode >= 3) {
           this.adsCSSList.twoPageStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'TwoPageStyle') // 双列效果
@@ -1233,10 +1296,14 @@
     }
 
     getMultiPageStyle() {
+      // 列宽必须用 1fr 参与 gap 计算：33.3%/25% 是纯百分比，叠加 TwoPage 的 20px gap 后总宽超过容器，
+      // 会让最后一列被挤出容器（1366/1440 下直接出现横向滚动条）
+      const columnCount = +this.curConfig.adsStyleMode === 4 ? 3 : 4
+      console.mylog('生成多列样式，列数:', columnCount)
       return this.options.useItem.MultiPageType +
         (+this.curConfig.adsStyleMode === 4 ?
-          "{grid-template-columns: repeat(3, 33.3%); grid-template-areas:'xmain xmain xmain';}" :
-          "{grid-template-columns: repeat(4, 25%); grid-template-areas:'xmain xmain xmain xmain';}")
+          "{grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-areas:'xmain xmain xmain';}" :
+          "{grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas:'xmain xmain xmain xmain';}")
     }
 
     async getHuyanStyle() {
@@ -1275,8 +1342,14 @@
     }
 
     async loadAllStyle() {
-      if (!this.adsCSSList.leftCommonStyle) this.adsCSSList.leftCommonStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'CommonStyle') // 单列效果
-      if (!this.adsCSSList.onePageStyle) this.adsCSSList.onePageStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'OnePageStyle') // 单列居中
+      if (!this.adsCSSList.leftCommonStyle) this.adsCSSList.leftCommonStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'CommonStyle') // 所有模式共用
+      if (!this.adsCSSList.onePageStyle) this.adsCSSList.onePageStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'OnePageStyle') // 单列（靠左）
+      // 单列居中：已拆分的引擎是独立文件；未拆分的引擎在模式 2 下仍读 OnePageStyle（上面已预载）
+      const split = this.splitStyleSupport()
+      if (split.oneCenter && !this.adsCSSList.oneCenterStyle) {
+        this.adsCSSList.oneCenterStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'OneCenterStyle') // 单列居中
+        if (!this.adsCSSList.oneCenterStyle) console.mylog('预载 OneCenterStyle 为空：' + this.options.siteName)
+      }
       if (!this.adsCSSList.twoPageStyle) this.adsCSSList.twoPageStyle = await this.loadStyleByName_WithLessCache(this.options.siteName + 'TwoPageStyle') // 双列效果
       if (!this.adsCSSList.baiduLiteStyle) this.adsCSSList.baiduLiteStyle = await this.loadStyleByName_WithLessCache('baiduLiteStyle')
       if (!this.adsCSSList.bgAutoFitStyle) this.adsCSSList.bgAutoFitStyle = await this.loadStyleByName_WithLessCache('BgAutoFit')
@@ -1379,6 +1452,116 @@
   class PageFuncClass {
     constructor() {
       this.removeAds = this.removeAdFunc()
+    }
+
+    /* 顶部搜索框与结果列对齐（必须定义在 PageFuncClass 上，调用方是 PageFunc.syncHeadAlignment()；
+       之前误放进 ACGM / PageBlockClass，运行时报 "syncHeadAlignment is not a function"）：
+       单页样式下（尤其显示右侧栏时）#content_left 会被 transform 左移（1360 宽实测 -184px）；
+       1920 宽即便「相对结果列居中」也会比卡片左沿内缩 52px，看起来仍不在同一条竖线上。
+       这里按「搜索框左沿 = 结果列左沿」算位移，夹在 logo 右沿与右侧菜单左沿之间，
+       写入 body 的 --ac-head-offset，由 less 叠加到搜索框的 translateX 上；
+       视口变化、列宽变化、右侧栏显隐都会重算 */
+    syncHeadAlignment() {
+      if (this._headAlignBound) return
+      this._headAlignBound = true
+      console.mylog('【顶部对齐】启动：监听 resize / 结果列尺寸 / body class 变化')
+      let retry = 0
+      const apply = () => {
+        const contentLeft = document.querySelector('#content_left')
+        const anchor = document.querySelector('.chat-input-anchor')
+        if (!contentLeft || !anchor || !document.body) {
+          // 百度的头部和结果列是分批插入的，首帧经常还没到；最多重试 40 次（约 12 秒），
+          // 否则这里静默返回会让整个对齐功能失效，页面上看不出任何报错
+          if (retry++ < 40) setTimeout(apply, 300)
+          else console.mylog('【顶部对齐】放弃：12 秒内未等到 #content_left 或 .chat-input-anchor')
+          return
+        }
+        retry = 0
+        const viewportWidth = document.documentElement.clientWidth
+        const colRect = contentLeft.getBoundingClientRect()
+        if (!colRect.width) return
+        const logo = document.querySelector('#head #result_logo, #head .result_logo')
+        const menu = document.querySelector('#head .head_wrapper #u')
+        const logoRight = logo ? logo.getBoundingClientRect().right : 125
+        // #u 的盒子有 382px 宽且内部右对齐，真正会被压到的是第一个可见子项
+        // （1600 实测：盒子左 1179，首个可见子项 1203），所以边界取两者较右的一个
+        let menuEdge = menu ? menu.getBoundingClientRect().left : viewportWidth - 24
+        if (menu) {
+          const firstItem = [...menu.children].find(el => el.getBoundingClientRect().width > 1)
+          if (firstItem) menuEdge = Math.max(menuEdge, firstItem.getBoundingClientRect().left)
+        }
+        // 目标：搜索框「左沿 = 结果列左沿、宽度 = 结果列宽度」。
+        // 但左边不能压 logo、右边不能压顶部菜单，所以先夹左沿，再按剩余空间夹宽度
+        const targetLeft = Math.round(Math.max(colRect.left, logoRight + 16))
+        const maxBoxWidth = Math.max(320, menuEdge - 16 - targetLeft)
+        const boxWidth = Math.round(Math.min(colRect.width, maxBoxWidth))
+        // 变量分工：--ac-col-left / --ac-col-width 给标签栏（同左沿、同宽度），
+        // --ac-head-width 给搜索框（已按可用空间夹过，不会顶到菜单）。
+        // 这些是量出来的值，写进 CSS 变量比在 less 里复刻列的 transform 公式稳得多
+        const vars = {
+          '--ac-col-left': Math.round(colRect.left) + 'px',
+          '--ac-col-width': Math.round(colRect.width) + 'px',
+          '--ac-head-width': boxWidth + 'px'
+        }
+        for (const [key, value] of Object.entries(vars)) {
+          if (document.body.style.getPropertyValue(key) !== value) document.body.style.setProperty(key, value)
+        }
+        // less 侧用 body[ac-col-metrics] 作为开关：没有这个属性就退回旧写法，
+        // 避免脚本没跑（老版本/首帧）时搜索框和标签栏被 var 兜底值摆到屏幕左侧
+        if (document.body.getAttribute('ac-col-metrics') !== '1') {
+          document.body.setAttribute('ac-col-metrics', '1')
+          console.mylog('【顶部对齐】结果列几何写入 CSS 变量：左沿', vars['--ac-col-left'], '宽度', vars['--ac-col-width'], '搜索框宽度', vars['--ac-head-width'])
+        }
+        const width = anchor.offsetWidth
+        if (!width) return
+        if (Math.abs(width - boxWidth) > 1) {
+          // 变量刚改，宽度可能还没落地；用旧宽度算出的位移是错的，补一轮即可稳定
+          setTimeout(apply, 60)
+        }
+        // 居中时搜索框左沿的位置；offset 就是在这个位置上的偏移量
+        const naturalLeft = viewportWidth / 2 - width / 2
+        const offset = Math.round(targetLeft - naturalLeft)
+        const nextOffset = offset + 'px'
+        if (document.body.style.getPropertyValue('--ac-head-offset') === nextOffset) return
+        document.body.style.setProperty('--ac-head-offset', nextOffset)
+        console.mylog('【顶部对齐】搜索框对齐结果列，偏移:', nextOffset, '（结果列左沿', Math.round(colRect.left), '宽', Math.round(colRect.width), '搜索框宽', width, '）')
+      }
+      apply()
+      // 浏览器在 resize / class 切换后会连续几次重排，直接读 rect 容易拿到中间态，
+      // 统一推到下一帧再算（双帧确保样式已落地）。
+      // 注意：后台标签页里 requestAnimationFrame 会被完全挂起（实测 CDP 切视口后 offset 一直停在旧值），
+      // 所以额外挂一个定时器兜底；apply 内部做过值比较，重复执行没有副作用
+      const schedule = () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => apply()))
+        clearTimeout(this._headAlignTimer)
+        this._headAlignTimer = setTimeout(apply, 120)
+      }
+      window.addEventListener('resize', schedule, { passive: true })
+      if (typeof ResizeObserver !== 'undefined') {
+        // 元素还不存在时 observe(null) 会抛异常，把后面的监听全部带崩，这里必须判空
+        const target = document.querySelector('#content_left')
+        if (target) {
+          const observer = new ResizeObserver(() => schedule())
+          observer.observe(target)
+          this._headAlignObserver = observer
+        }
+      }
+      // 右侧栏显隐只改 class，不改结果列尺寸，所以额外盯 body 的 class 变化
+      if (typeof MutationObserver !== 'undefined') {
+        const classObserver = new MutationObserver(() => schedule())
+        classObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+        this._headAlignClassObserver = classObserver
+      }
+      // 竖向滚动条出现/消失会改 clientWidth（2048 实测 15px），整页会横移一格，
+      // 而结果列宽度不变 → 上面的 ResizeObserver 不会触发，变量就停在旧值上。
+      // 盯 html 的尺寸变化可以覆盖这种「视口有效宽度变了但元素尺寸没变」的情况
+      if (typeof ResizeObserver !== 'undefined') {
+        const docObserver = new ResizeObserver(() => schedule())
+        docObserver.observe(document.documentElement)
+        this._headAlignDocObserver = docObserver
+      }
+      // 首屏图片/字体加载完列宽还会跳一次，补两次延迟重算
+      ;[300, 1200].forEach(delay => setTimeout(apply, delay))
     }
 
     GoogleInBaiduMode() {
@@ -1904,11 +2087,20 @@
           console.mylog('靠左优化模式')
           CONST.cssAutoInsert.add("expandPageStyle", CONST.adsCSSList.expandPageStyle)
           CONST.cssAutoInsert.add("leftCommonStyle", CONST.adsCSSList.leftCommonStyle)
+          // 只有「OnePage 已改成靠左规则」的引擎才加载它（见 splitStyleSupport 表），其余引擎靠左模式只有 Common
+          if (CONST.splitStyleSupport().onePage) {
+            CONST.cssAutoInsert.add("onePageStyle", CONST.adsCSSList.onePageStyle)
+          }
         } else if (+CONST.curConfig.adsStyleMode === 2) {
           console.mylog('单列居中')
           CONST.cssAutoInsert.add("expandPageStyle", CONST.adsCSSList.expandPageStyle)
           CONST.cssAutoInsert.add("leftCommonStyle", CONST.adsCSSList.leftCommonStyle)
-          CONST.cssAutoInsert.add("onePageStyle", CONST.adsCSSList.onePageStyle)
+          // 拆出 OneCenterStyle 的引擎读它；拿不到内容（远端还没同步）时退回 OnePageStyle
+          if (CONST.adsCSSList.oneCenterStyle) {
+            CONST.cssAutoInsert.add("oneCenterStyle", CONST.adsCSSList.oneCenterStyle)
+          } else {
+            CONST.cssAutoInsert.add("onePageStyle", CONST.adsCSSList.onePageStyle)
+          }
         } else if (+CONST.curConfig.adsStyleMode === 3) {
           console.mylog('双列居中')
           CONST.cssAutoInsert.add("leftCommonStyle", CONST.adsCSSList.leftCommonStyle)
@@ -1920,7 +2112,6 @@
           CONST.cssAutoInsert.add("multiPageStyle", CONST.adsCSSList.multiPageStyle)
         }
       }
-
       CONST.cssAutoInsert.add("styleLogo", ".minidiv #logo img{width: 100px;height: unset;margin-top: 0.3rem;} body.purecss-mode:before{display: none;}")
       CONST.cssAutoInsert.add("specialBAIDU", ".opr-recommends-merge-imgtext{display:none!important;}.res_top_banner{display:none!important;}.headBlock, body>div.result-op{display:none;}")
       CONST.cssAutoInsert.add("animationStyle", `
@@ -2133,7 +2324,9 @@
               console.error("[AC-Script]", "翻页到达底部了 - 或者异常 - 出现异常请直接反馈作者修改");
               return;
             }// 不会重复加载相同的页面
-            console.log("加载翻页地址：" + url)
+            CONST.lock.hasStartedLoadMore = true;
+            console.mylog('翻页已启动，锁定当前多列布局');
+            console.log("加载翻页地址：" + url);
             CONST.options.useItem.pageUrl = url;
             // 注入加载指示器
             const loader = document.createElement('div');
@@ -2699,10 +2892,25 @@
   const PageFunc = new PageFuncClass()
   const PageBlockFunc = new PageBlockClass()
 
+  // 调试日志开启时把核心对象暴露到页面，方便在控制台 / CDP 里就地验证加载分支
+  // （例如强制 curConfig.adsStyleMode = 2 再调 loadSiteCSS + dataChangeFireCallback，
+  //   看 style[data-name] 出的是 oneCenterStyle 还是回退的 onePageStyle，不需要改用户持久化配置）
+  if (CONST.curConfig.isDevMode) {
+    unsafeWindow.AC_DEBUG_HANDLES = { CONST, PageFunc }
+    console.mylog('【调试】已暴露 AC_DEBUG_HANDLES（CONST / PageFunc）')
+  }
+
   await (async function () {
     /***Google双列修复***/
     CONST.addIntervalTrigger('google', 'now', (counter) => {
       function findAndMarkP2Line() {
+
+        // Google AI Overview 是动态插入的独立模块，不应被当作普通搜索结果参与双列父子节点判定。
+        // 使用页面源码中可确认的 AI 容器类名，避免误改整个搜索结果容器。
+        const isGoogleAIOverviewNode = (node) => {
+          if (!node || node.nodeType !== 1) return false
+          return node.matches('.j2luwe.pWvJNd') || !!node.querySelector('.j2luwe.pWvJNd')
+        }
 
         function markFatherChild(child, father) {
           const child_checkedAttr = child.getAttribute('two-checked') || 0
@@ -2723,10 +2931,16 @@
         // 检查的事preNode 和 curNode
         // 但是需要先判断curNode和fatherNode有没有
         function getTrueFatherChild(preNode, curNode, fatherNode) {
+          // 翻页后的原始节点没有布局标记，继续补充标记，但不再根据高度重新选择父节点
+          if (CONST.lock.hasStartedLoadMore) {
+            return markFatherChild(curNode, fatherNode)
+          }
+
           const minItemHeight = 60
           const father_curPossible = curNode.offsetHeight > minItemHeight && fatherNode.offsetHeight / curNode.offsetHeight > 1.5
           const father_anotherPossible = [...fatherNode.children].some(one => {
-            return one !== curNode && one.offsetHeight > minItemHeight && fatherNode.offsetHeight / one.offsetHeight > 5;
+            return one !== curNode && !isGoogleAIOverviewNode(one) &&
+              one.offsetHeight > minItemHeight && fatherNode.offsetHeight / one.offsetHeight > 5;
           })
           const fatherNotMain = fatherNode.id === "cnt";
 
@@ -2736,7 +2950,8 @@
           } else {
             const now_curPossible = preNode.offsetHeight > minItemHeight && curNode.offsetHeight / preNode.offsetHeight > 1.5
             const now_anotherPossible = [...curNode.children].some(one => {
-              return one !== preNode && one.offsetHeight > minItemHeight && curNode.offsetHeight / one.offsetHeight > 5;
+              return one !== preNode && !isGoogleAIOverviewNode(one) &&
+                one.offsetHeight > minItemHeight && curNode.offsetHeight / one.offsetHeight > 5;
             })
             // 父节点不行的话，那么检查子节点是否符合要求
             if (now_curPossible && now_anotherPossible) {
@@ -2748,6 +2963,8 @@
 
         // 标记自身
         function MarkMine(curItem) {
+          // AI 概览内部的卡片不参与普通搜索结果的双列标记。
+          if (curItem.closest('.j2luwe.pWvJNd')) return null
           let maxHeight = 9, curHeight = 1
           let preNode = curItem
           while (curHeight < maxHeight) {
@@ -2788,6 +3005,63 @@
         CONST.curConfig.enableCSS = false
         return
       }
+      // Google 会异步插入或重新渲染 AI 概览，不能只依赖某一组会变化的 class。
+      const googleRcnt = document.querySelector('#rcnt')
+      const googleCenterCol = document.querySelector('#center_col')
+
+      // 第一层：优先使用已确认过的结构选择器。
+      const googleAI = document.querySelector(
+        '.j2luwe.pWvJNd, #m-x-content, [data-attrid="AIOverview"]'
+      )
+      if (googleAI) {
+        const aiModule = googleAI.closest('.SLPe5b.M8OgIe, .FkX2oe') || googleAI
+        aiModule.style.setProperty('display', 'none', 'important')
+      }
+
+      // 第二层：Google 更换 class 后，用标题文本识别 AI 概览，并只隐藏 #rcnt 下的独立模块。
+      // 限定在 #rcnt 内，且禁止把 #center_col / #rso 等搜索结果主容器误隐藏。
+      if (googleRcnt) {
+        const headings = googleRcnt.querySelectorAll('h1, h2, [role="heading"], span')
+        for (const heading of headings) {
+          const label = (heading.innerText || heading.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase()
+          if (!/(ai overview|ai 概览|ai 摘要|人工智能概览)/i.test(label)) continue
+
+          let module = heading
+          while (module.parentElement && module.parentElement !== googleRcnt) {
+            module = module.parentElement
+          }
+          if (module !== googleRcnt && module !== googleCenterCol &&
+              module.id !== 'center_col' && module.id !== 'rso' &&
+              !(googleCenterCol && module.contains(googleCenterCol))) {
+            module.style.setProperty('display', 'none', 'important')
+          }
+        }
+      }
+
+      if (googleRcnt && googleCenterCol) {
+        // 参考百度主内容区宽度；窄屏下自动收缩。
+        googleRcnt.style.setProperty('width', 'min(1544px, calc(100vw - 336px))', 'important')
+        googleRcnt.style.setProperty('max-width', 'calc(100vw - 32px)', 'important')
+        googleRcnt.style.setProperty('grid-template-columns', 'minmax(0, 1fr)', 'important')
+        googleRcnt.style.setProperty('margin-inline', 'auto', 'important')
+        googleCenterCol.style.setProperty('grid-column', '1 / -1', 'important')
+        googleCenterCol.style.setProperty('width', '100%', 'important')
+        googleCenterCol.style.setProperty('max-width', '1544px', 'important')
+        googleCenterCol.style.setProperty('min-width', '0', 'important')
+        googleCenterCol.style.setProperty('justify-self', 'stretch', 'important')
+
+        const googleRso = googleCenterCol.querySelector('#rso')
+        if (googleRso) {
+          const mode = Number(CONST.curConfig.adsStyleMode || 3)
+          const columns = mode >= 5 ? 4 : mode >= 4 ? 3 : 2
+          googleRso.style.setProperty('width', '100%', 'important')
+          googleRso.style.setProperty('max-width', '100%', 'important')
+          googleRso.style.setProperty('grid-template-columns', 'repeat(' + columns + ', minmax(0, 1fr))', 'important')
+          googleRso.style.setProperty('column-gap', '24px', 'important')
+          googleRso.style.setProperty('box-sizing', 'border-box', 'important')
+        }
+      }
+
       findAndMarkP2Line()
 
     }, 150, 10000000)
@@ -2923,6 +3197,19 @@
           document.body.classList.add('ac-ready')
         }, 400)
       }
+      // 把当前列数模式写到 body 上，供 less 做模式级选择器（例如单列靠左下结果列的宽度覆盖）
+      // 好搜的默认配置是 BaseConfig(false)，压根没有 adsStyleMode，+undefined 会得到 NaN，
+      // 写上去会变成 body[ac-style-mode="NaN"]，排查时容易误判成模式匹配失败，这里只在有效值时写入
+      const nowStyleModeNum = +CONST.curConfig.adsStyleMode
+      if (Number.isFinite(nowStyleModeNum)) {
+        const nowStyleMode = String(nowStyleModeNum)
+        if (document.body.getAttribute('ac-style-mode') !== nowStyleMode) {
+          document.body.setAttribute('ac-style-mode', nowStyleMode)
+          console.mylog('【列数模式】已写入 body[ac-style-mode]:', nowStyleMode)
+        }
+      }
+      // 搜索框左沿跟随结果列左沿，避免单页+右侧栏时两者错位
+      PageFunc.syncHeadAlignment()
       PageFunc.InsertSettingMenu()
       if (CONST.curConfig.isAutopage) {
         setTimeout(() => {
